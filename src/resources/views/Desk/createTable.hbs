@@ -1,0 +1,240 @@
+
+<div style="margin-top: 60px;">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-tableType-tab" data-bs-toggle="tab" data-bs-target="#nav-tableType"
+                type="button" role="tab" aria-controls="nav-tableType" aria-selected="true">Table</button>
+        </div>
+    </nav>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="nav-tableType" role="tabpanel" aria-labelledby="nav-tableType-tab"
+            tabindex="0">
+            <div class="row">
+                <div class="col-md-4">
+                    <div style="margin-top: 20px;" class="container">
+                        <div id="tableTypeTabContent">
+                            <form action="/ban/add" method="post" id="addForm">
+                                <div class="row mb-3">
+                                    <label for="nameTable" class="col-form-label">Name Table Type</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="nameTable">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <select class="form-select" aria-label="Default select example"
+                                            name="selectTableType">
+                                            <option value="no">Select Table Type</option>
+                                            {{#each dataTableType}}
+                                            <option value="{{this._id}}">{{this.nameTableType}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                    <p style="color: {{#if errorMessage}}red{{else}}green{{/if}};">
+                                        {{#if errorMessage}}
+                                        {{errorMessage}}
+                                        {{else}}
+                                        {{successMessage}}
+                                        {{/if}}
+                                    </p>
+                                </div>
+
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="statusTable" checked>
+                                            <label class="form-check-label" for="status">
+                                                Status
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button style="margin-left: 30%;" type="submit" class="btn btn-primary">Thêm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Đây là phần divider -->
+                <div class="col-md-7">
+                    <h3 style="text-align: center;">Danh Sách</h3>
+                    <div style="margin-top: 30px;" class="grid text-center">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                            {{#each dataTable }}
+                            <div class="col">
+                                <div class="card item">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Name: {{this.nameTable}}</h5>
+                                        <p class="card-text">Status: {{this.statusTable}}</p>
+                                        <p class="card-text">Table Type: {{this.tableType.nameTableType}}</p>
+                                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-id="{{this._id}}" data-name="{{this.nameTable}}" data-tableType="{{this.tableType.nameTableType}}" data-status="{{this.statusTable}}" data-bs-target="#update-table">Sửa</a>
+                                        <a href="" class="btn btn-danger" data-bs-toggle="modal" data-id="{{this._id}}" data-bs-target="#delete-table">Xoá</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                        {{#if success }}
+                        <div id="success-alert" class="alert alert-success d-flex align-items-center" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                            <div>
+                                An example success alert with an icon
+                            </div>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+   <div class="modal fade" id="update-table" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Update Table</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                      <form method="post" id="update-table-form">
+                                <div class="row mb-3">
+                                    <label for="nameTable" class="col-form-label">Name Table Type</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="nameTable">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <select class="form-select" aria-label="Default select example"
+                                            name="selectTableType">
+                                            <option value="no">Select Table Type</option>
+                                            {{#each dataTableType}}
+                                            <option value="{{this._id}}">{{this.nameTableType}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="statusTable">
+                                            <label class="form-check-label" for="status">
+                                                Status
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="btn-update-table" type="button" class="btn btn-primary">Update</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {{!-- aleat --}}
+    <div class="modal fade" id="delete-table" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Xoá Table</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn Chắc Muốn Xoá</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-delete-table" type="button" class="btn btn-danger">Xoá</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{!-- delete from hident --}}
+    <form id="delete-table-form" method="post"></form>
+
+    <!-- Alert for success message -->
+
+
+
+
+    <script>
+        var exampleModal = document.getElementById('delete-table')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            var btnDeleteTable = document.getElementById('btn-delete-table');
+            var deleteFrom = document.forms['delete-table-form'];
+            var button = event.relatedTarget
+            var id = button.getAttribute('data-id')
+        
+
+            btnDeleteTable.onclick = function () {
+                deleteFrom.action = '/ban/delete/' + id + '?_method=delete'
+                deleteFrom.submit()
+            }
+        });
+
+
+
+
+         var exampleModal = document.getElementById('update-table')
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+                var btnUpdateTable = document.getElementById('btn-update-table');
+                var updateForm = document.forms['update-table-form'];
+                var button = event.relatedTarget
+                var id = button.getAttribute('data-id')
+                var name = button.getAttribute('data-name')
+                var status = button.getAttribute('data-status')
+                
+                var tableType = button.getAttribute('data-tableType')
+                var nameInput = updateForm.querySelector('[name="nameTable"]');
+                var selectTableType = updateForm.querySelector('[name="selectTableType"]');
+                var statusInput = updateForm.querySelector('[name="statusTable"]');
+
+                nameInput.value = name;
+                statusInput.checked = status === 'true';
+
+
+                for (var i = 0; i < selectTableType.options.length; i++) {
+                    if (selectTableType.options[i].textContent === tableType) {
+                        selectTableType.options[i].selected = true;
+                        break;
+                    }
+                }
+
+                
+
+                btnUpdateTable.onclick = function () {
+                     updateForm.action = '/ban/update/' + id + '?_method=put'
+                     updateForm.submit()
+                }
+            });
+    </script>
+
+    <script>
+    const successAlert = document.getElementById("success-alert");
+    if (successAlert) {
+        setTimeout(function () {
+            successAlert.style.display = "none";
+        }, 2000);
+    }
+    </script>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </symbol>
+    </svg>

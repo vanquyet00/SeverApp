@@ -1,0 +1,301 @@
+
+<div style="margin-top: 60px;">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-MenuType-tab" data-bs-toggle="tab" data-bs-target="#nav-tableType"
+                type="button" role="tab" aria-controls="nav-tableType" aria-selected="true">Menu</button>
+        </div>
+    </nav>
+    
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="nav-MenuType" role="tabpanel" aria-labelledby="nav-MenuType-tab"
+            tabindex="0">
+            <div class="row">
+                <div class="col-md-4">
+                    <div style="margin-top: 20px;" class="container">
+                        <div id="MenuTypeTabContent">
+                            <form action="/mon/add" method="post" id="addForm" enctype="multipart/form-data">
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="nameMenu" placeholder="Name Menu">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="priceMenu"
+                                            placeholder="Price Menu">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <select class="form-select" aria-label="Default select example"
+                                            name="selectMenuType">
+                                            <option value="no">Select Menu Type</option>
+                                            {{#each dataMenuType}}
+                                            <option value="{{this._id}}">{{this.nameMenuType}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="file" id="images" name="images" multiple ><br>
+                                    </div>
+                                </div>
+
+                                <p style="color: {{#if errorMessage}}red{{else}}green{{/if}};">
+                                    {{#if errorMessage}}
+                                    {{errorMessage}}
+                                    {{else}}
+                                    {{successMessage}}
+                                    {{/if}}
+                                </p>
+
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="statusMenu" checked>
+                                            <label class="form-check-label" for="status">
+                                                Status
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button style="margin-left: 30%;" type="submit" class="btn btn-primary">Thêm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Đây là phần divider -->
+                <div class="col-md-7">
+                    <h3 style="text-align: center;">Danh Sách</h3>
+                    <div style="margin-top: 30px;" class="grid">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                            {{#each dataMenu }}
+                            <div class="col">
+                                <div class="card item">
+            
+                                   <img src="/img/{{this.imageMenu.[0]}}" class="card-img-top" alt="..." height="250px" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">Name: {{this.nameMenu}}</h5>
+                                        <p class="card-text">Price: {{this.priceMenu}}</p>
+                                        <p class="card-text">Status: {{this.statusMenu}}</p>
+                                        <p class="card-text">Menu Type: {{this.menuType.nameMenuType}}</p>
+                                       <!-- Lấy phần tử đầu tiên từ mảng imageMenu -->
+                                        <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-id="{{this._id}}" data-name="{{this.nameMenu}}"
+                                            data-MenuType="{{this.menuType.nameMenuType}}"
+                                            data-Price="{{this.priceMenu}}"
+                                            data-status="{{this.statusMenu}}"
+                                            data-imageMenu="{{this.imageMenu}}"
+                                            data-bs-target="#update-Menu">Sửa</a>
+
+                                        <a href="" class="btn btn-danger" data-bs-toggle="modal" data-id="{{this._id}}"
+                                            data-bs-target="#delete-Menu">Xoá</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                        {{#if success }}
+                        <div id="success-alert" class="alert alert-success d-flex align-items-center" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                                <use xlink:href="#check-circle-fill" />
+                            </svg>
+                            <div>
+                                An example success alert with an icon
+                            </div>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="update-Menu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Update Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="update-Menu-form" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                            <label for="nameMenu" class="col-form-label">Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="nameMenu">
+                            </div>
+                        </div>
+
+                           <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="priceMenu"
+                                            placeholder="Price Menu">
+                                    </div>
+                                </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <select class="form-select" aria-label="Default select example" name="selectMenuType">
+                                    <option value="no">Select Menu Type</option>
+                                    {{#each dataMenuType}}
+                                    <option value="{{this._id}}">{{this.nameMenuType}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                             <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="file" id="images" name="images" multiple ><br>
+                                    </div>
+                                </div>
+
+
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="statusMenu">
+                                    <label class="form-check-label" for="status">
+                                        Status
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                          <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <div class="image-container">
+
+                                 <div class="image-list">
+                                        
+                                        <img  class="card-img-top" alt="..." name="imageMenu"/>
+                                </div>          
+    <!-- Đây là nơi để hiển thị các ảnh -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="btn-update-Menu" type="button" class="btn btn-primary">Update</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {{!-- aleat --}}
+    <div class="modal fade" id="delete-Menu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Xoá Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn Chắc Muốn Xoá</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-delete-Menu" type="button" class="btn btn-danger">Xoá</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{!-- delete from hident --}}
+    <form id="delete-Menu-form" method="post"></form>
+
+    <!-- Alert for success message -->
+
+
+
+
+    <script>
+        var exampleModal = document.getElementById('delete-Menu')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            var btnDeleteMenu = document.getElementById('btn-delete-Menu');
+            var deleteFrom = document.forms['delete-Menu-form'];
+            var button = event.relatedTarget
+            var id = button.getAttribute('data-id')
+            console.log(deleteFrom);
+
+            btnDeleteMenu.onclick = function () {
+                deleteFrom.action = '/mon/delete/' + id + '?_method=delete'
+                deleteFrom.submit()
+            }
+        });
+
+
+
+       
+    var exampleModal = document.getElementById('update-Menu');
+exampleModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var imageContainer = document.querySelector('#update-Menu-form .image-list');
+
+    // Lấy danh sách đường dẫn hình ảnh từ thuộc tính 'data-imageMenu'
+    var imageUrls = button.getAttribute('data-imageMenu').split(',');
+
+    // Xóa tất cả các phần tử hình ảnh hiện có trong modal
+    imageContainer.innerHTML = '';
+
+    // Tạo các phần tử hình ảnh mới và thêm chúng vào modal
+    imageUrls.forEach(function (imageUrl) {
+        var imgElement = document.createElement('img');
+        imgElement.src = "/img/" + imageUrl;
+        imgElement.alt = "Image";
+        imageContainer.appendChild(imgElement);
+    });
+
+    var btnUpdateMenu = document.getElementById('btn-update-Menu');
+    var updateForm = document.forms['update-Menu-form'];
+    var id = button.getAttribute('data-id');
+    var name = button.getAttribute('data-name');
+    var status = button.getAttribute('data-status');
+    var price = button.getAttribute('data-Price');
+    var menuType = button.getAttribute('data-MenuType');
+    var nameInput = updateForm.querySelector('[name="nameMenu"]');
+    var selectMenuType = updateForm.querySelector('[name="selectMenuType"]');
+    var statusInput = updateForm.querySelector('[name="statusMenu"]');
+    var priceMenu = updateForm.querySelector('[name="priceMenu"]');
+    
+    // Đặt giá trị của các trường dựa trên dữ liệu từ nút
+    nameInput.value = name;
+    priceMenu.value = price;
+    statusInput.checked = status === 'true';
+
+    for (var i = 0; i < selectMenuType.options.length; i++) {
+        if (selectMenuType.options[i].textContent === menuType) {
+            selectMenuType.options[i].selected = true;
+            break;
+        }
+    }
+
+    btnUpdateMenu.onclick = function () {
+        updateForm.action = '/mon/update/' + id + '?_method=put'
+        updateForm.submit()
+    }
+        });
+
+    </script>
+
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </symbol>
+    </svg>
